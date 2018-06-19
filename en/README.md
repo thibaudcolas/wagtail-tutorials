@@ -8,7 +8,7 @@ Current tutorials are:
 
 ### English
 
-- [Django Girls extension: Getting started with Wagtail](/en/django_girls_extension_getting_started_with_wagtail)
+- [Django Girls extension: Getting started with Wagtail](django_girls_extension_getting_started_with_wagtail)
 
 ## Contributing
 
