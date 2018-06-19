@@ -1,0 +1,31 @@
+{
+  "name": "wagtail-tutorials",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Tutorials for Wagtail",
+  "author": "Thibaud Colas",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thibaudcolas/wagtail-tutorials.git"
+  },
+  "bugs": {
+    "url": "https://github.com/thibaudcolas/wagtail-tutorials/issues"
+  },
+  "homepage": "https://github.com/thibaudcolas/wagtail-tutorials#readme",
+  "keywords": [],
+  "license": "CC-BY-SA-4.0",
+  "devDependencies": {
+    "gitbook-cli": "^2.3.2"
+  },
+  "scripts": {
+    "gitbook": "gitbook"
+  },
+  "dependencies": {
+    "gitbook-plugin-codeblock-label": "^1.0.1",
+    "gitbook-plugin-github": "^2.0.0",
+    "gitbook-plugin-heading-anchors": "^1.0.3",
+    "gitbook-plugin-language-picker": "^0.1.0",
+    "gitbook-plugin-richquotes": "0.0.7",
+    "gitbook-plugin-sidebar-ad": "0.0.4"
+  }
+}
