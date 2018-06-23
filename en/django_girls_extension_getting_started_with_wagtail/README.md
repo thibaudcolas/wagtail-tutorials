@@ -8,13 +8,15 @@ Django is a great framework in its own right, but what makes it shine is the com
 
 ## Why do you need a CMS?
 
-Maybe you don't! Django, a web application framework, can be used to create any kind of site or web app. On the other hand, Wagtail is specifically made to build sites that contain a lot of content, most likely with people from different disciplines collaborating to build the site: content writers and editors; but also developers, designers, marketers, and more. If you want to make a blog, portfolio, business site, or any kind of other site where content and collaboration are key – you will benefit from using a CMS.
+Maybe you don't! Django, a general web application framework, can be used to create any kind of site or web app. On the other hand, Wagtail is specifically made to build sites that contain a lot of content, most likely with people from different disciplines collaborating to build the site: content writers and editors; but also developers, designers, marketers, and more. You will benefit from a CMS if you want to make a blog, portfolio, business site, or any kind of site where content and collaboration are key.
 
 ## Wagtail installation
 
 > **Note** This section assumes you have already [started your virtualenv and installed Django](https://tutorial.djangogirls.org/en/django_installation/).
 
 Go to your console with `virtualenv` activated and run `pip install wagtail~=2.1.0` to install Wagtail:
+
+{% filename %}command-line{% endfilename %}
 
 ```
 (myvenv) ~$ pip install wagtail~=2.1.0
@@ -27,5 +29,101 @@ Successfully installed [...] [wagtail-2.1
 And that should be it!
 
 ## Configuring Wagtail for your Django site
+
+Now, we need to configure your existing Django site to use Wagtail.
+
+### Changing settings
+
+Let's make some changes in `mysite/settings.py`. Open the file using your code editor.
+
+We'll start by telling Django about all of Wagtail's components. Find the `INSTALLED_APPS` setting in your settings file, and replace it with:
+
+{% filename %}mysite/settings.py{% endfilename %}
+
+```python
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'blog',
+
+    'wagtail.contrib.forms',
+    'wagtail.contrib.redirects',
+    'wagtail.embeds',
+    'wagtail.sites',
+    'wagtail.users',
+    'wagtail.snippets',
+    'wagtail.documents',
+    'wagtail.images',
+    'wagtail.search',
+    'wagtail.admin',
+    'wagtail.core',
+
+    'modelcluster',
+    'taggit',
+]
+```
+
+Then, in the `MIDDLEWARE` section just below, add the following lines right at the end of the array:
+
+{% filename %}mysite/settings.py{% endfilename %}
+
+```python
+'wagtail.core.middleware.SiteMiddleware',
+'wagtail.contrib.redirects.middleware.RedirectMiddleware',
+```
+
+Finally, we'll add something to give a bit of flavour to our site – a site name to display in the admin, with the `WAGTAIL_SITE_NAME` setting. This can be anything you want:
+
+{% filename %}mysite/settings.py{% endfilename %}
+
+```python
+WAGTAIL_SITE_NAME = 'Django Girls Blog'
+```
+
+### Adding Wagtail to the database
+
+We've already made a database when setting up Django – now we just need to add Wagtail’s tables to it. From your console, use `python manage.py migrate` and you should see something like this:
+
+{% filename %}command-line{% endfilename %}
+
+```
+(myvenv) ~$ python manage.py migrate
+Operations to perform:
+  Apply all migrations: admin, auth, blog, contenttypes, sessions, taggit, wagtailadmin, wagtailcore, wagtaildocs, wagtailembeds, wagtailforms, wagtailimages, wagtailredirects, wagtailsearch, wagtailusers
+Running migrations:
+  Applying taggit.0001_initial... OK
+  [...]
+  Applying wagtailusers.0006_userprofile_prefered_language... OK
+```
+
+### Django URLs for Wagtail
+
+The last configuration step is to update our existing Django URLs to add new ones for Wagtail. Let's open `mysite/urls.py` with your code editor, and replace the file's content with:
+
+{% filename %}mysite/urls.py{% endfilename %}
+
+```python
+from django.conf.urls import url, include
+from django.contrib import admin
+from django.conf import settings
+from django.conf.urls.static import static
+
+from wagtail.admin import urls as wagtailadmin_urls
+from wagtail.documents import urls as wagtaildocs_urls
+from wagtail.core import urls as wagtail_urls
+
+
+urlpatterns = [
+    url(r'^admin/', admin.site.urls),
+    url(r'^cms/', include(wagtailadmin_urls)),
+    url(r'^documents/', include(wagtaildocs_urls)),
+    url(r'^pages/', include(wagtail_urls)),
+    url(r'', include('blog.urls')),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+```
 
 http://docs.wagtail.io/en/v2.1/getting_started/integrating_into_django.html
