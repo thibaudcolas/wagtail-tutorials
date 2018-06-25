@@ -126,4 +126,20 @@ urlpatterns = [
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 ```
 
-http://docs.wagtail.io/en/v2.1/getting_started/integrating_into_django.html
+Line by line,
+
+- `wagtailadmin_urls` is the administration interface for Wagtail. This is separate from the Django admin (`admin.site.urls`).
+- `wagtaildocs_urls` is the location from where document files (for example PDFs) stored on your site will be available.
+- `wagtail_urls` is the base location for pages created with Wagtail. Here, we configure it to only manage pages starting with `pages/` so Django keeps full control over other pages.
+
+---
+
+And now we're good to go! From the directory that contains your site's `manage.py` file, start the server with `python manage.py runserver`:
+
+{% filename %}command-line{% endfilename %}
+
+```
+(myvenv) ~$ python manage.py runserver
+```
+
+Head to `http://127.0.0.1:8000/cms` to access the Wagtail administration interface. To log in, use the same account you made for Django.
